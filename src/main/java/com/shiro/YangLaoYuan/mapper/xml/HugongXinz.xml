@@ -1,0 +1,43 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.shiro.YangLaoYuan.mapper.HugongXinzMapper">
+    <select id="findHugongXinzByname"  resultType="com.shiro.YangLaoYuan.entity.HugongXinz">
+        select a.*,b.name,b.sex,b.sfz
+            from  ${dt.tablename}  a
+            left join sys_hugong b on a.hugongid=b.id
+            where 1=1
+            <if test="dt.keyword!=null and ''!=dt.keyword">
+                and b.name like CONCAT('%',#{dt.keyword},'%')
+            </if>
+
+
+    </select>
+
+
+
+
+    <update id="editHugongXinz" parameterType="com.shiro.YangLaoYuan.entity.HugongXinz">
+        UPDATE  `${tablename}`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="oma.yingfa!=null">yingfa=#{oma.yingfa},</if>
+            <if test="oma.yifa!=null">yifa=#{oma.yifa},</if>
+            <if test="oma.isshoudao!=null">isshoudao=#{oma.isshoudao},</if>
+            <if test="oma.info!=null">info=#{oma.info},</if>
+            ffrq=#{oma.ffrq},
+            <if test="oma.qjcont!=null">qjcont=#{oma.qjcont},</if>
+        </trim>
+        WHERE id=#{oma.id}
+    </update>
+
+
+    <update id="editHugongXinzbyhgid" parameterType="com.shiro.YangLaoYuan.entity.HugongXinz">
+        UPDATE  `${tablename}`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="oma.qjcont!=null">qjcont=#{oma.qjcont},</if>
+        </trim>
+        WHERE hugongid=#{oma.hugongid}
+    </update>
+
+
+</mapper>

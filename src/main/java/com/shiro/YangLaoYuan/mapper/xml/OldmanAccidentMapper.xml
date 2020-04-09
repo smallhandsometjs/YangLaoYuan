@@ -1,0 +1,18 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shiro.YangLaoYuan.mapper.OldmanAccidentMapper">
+
+
+
+
+    <select id="findOldmanaddidentsByname"  resultType="com.shiro.YangLaoYuan.entity.OldmanAccident">
+        select a.*,a.startdate as startdate,b.name,b.sex
+            from sys_oldmanaccident a
+            left join sys_oldman b on a.oldmanid=b.id
+            where 1=1
+            <if test="dt.keyword!=null and ''!=dt.keyword">
+                and b.name like CONCAT('%',#{dt.keyword},'%')
+            </if>
+
+
+    </select>
+</mapper>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shiro.YangLaoYuan.mapper.UserMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.shiro.YangLaoYuan.entity.User">
+		<id column="id" property="id" />
+        <result column="head_portraits" property="headPortraits"/>
+		<result column="nickname" property="nickname" />
+		<result column="email" property="email" />
+		<result column="pswd" property="pswd" />
+		<result column="create_time" property="createTime" />
+		<result column="last_login_time" property="lastLoginTime" />
+		<result column="status" property="status" />
+	</resultMap>
+
+	<select id="findUserByPage" resultType="com.shiro.YangLaoYuan.pojo.dto.UserDto">
+		SELECT
+		u.id,
+		u.nickname AS userName,
+		u.email,
+		u.create_time AS createTime,
+		u.status,
+		(
+		IF (
+		u.`status`,
+		'有效',
+		'禁止登陆'
+		)
+		) AS state,
+		u.last_login_time AS lastLoginTime,
+		r.description AS role
+		FROM
+		sys_user AS u
+		INNER JOIN sys_user_role ur ON u.id = ur.uid
+		INNER JOIN sys_role r ON ur.rid = r.id
+		WHERE
+		r.type = #{dto.type}
+		<if test="''!= dto.keyword">
+        AND u.nickname LIKE CONCAT('%',#{dto.keyword},'%')
+		</if>
+	</select>
+
+	<select id="checkUser" resultType="com.shiro.YangLaoYuan.pojo.dto.UserInfoDto">
+        SELECT
+		usr.id,
+		usr.nickname AS username,
+		usr.`status` AS state,
+		usr.pswd AS password ,
+        usr.head_portraits AS userImg,
+        usr.email,
+		ur.rid AS roleid,
+		r.`name` AS roleName,
+		r.type AS type
+		FROM
+		sys_user AS usr
+		LEFT JOIN sys_user_role AS ur ON usr.id = ur.uid
+		INNER JOIN sys_role AS r ON ur.rid = r.id
+		WHERE
+        usr.pswd = #{pass} AND usr.nickname = #{name}
+	</select>
+
+
+</mapper>

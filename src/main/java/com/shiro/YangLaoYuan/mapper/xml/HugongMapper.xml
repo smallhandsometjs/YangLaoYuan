@@ -1,0 +1,76 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shiro.YangLaoYuan.mapper.HugongMapper">
+
+    <!-- <insert id="addHugong" parameterType="com.shiro.YangLaoYuanan.entity.Hugong"
+            useGeneratedKeys="true" keyProperty="id">
+        "INSERT INTO `shiro`.`sys_hugong`(`name`, `sex`, `sfz`, `phone`, `level`)
+
+         VALUES (#{hg.name}, #{hg.sex}, #{hg.sfz}, #{hg.phone}, #{hg.level});
+    </insert>-->
+
+    <insert id="addHugong" parameterType="com.shiro.YangLaoYuan.entity.Hugong"
+            useGeneratedKeys="true" keyProperty="hg.id"  keyColumn="id">
+        insert into sys_hugong
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="hg.name != null">
+                name,
+            </if>
+            <if test="hg.sex != null">
+                sex,
+            </if>
+            <if test="hg.sfz != null">
+                sfz,
+            </if>
+            <if test="hg.phone != null">
+                phone,
+            </if>
+            <if test="hg.level != null">
+                level,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="hg.name != null">
+                #{hg.name,jdbcType=VARCHAR},
+            </if>
+            <if test="hg.sex != null">
+                #{hg.sex,jdbcType=VARCHAR},
+            </if>
+            <if test="hg.sfz != null">
+                #{hg.sfz,jdbcType=VARCHAR},
+            </if>
+            <if test="hg.phone != null">
+                #{hg.phone,jdbcType=VARCHAR},
+            </if>
+            <if test="hg.level != null">
+                #{hg.level,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+
+
+    <select id="findhugongByname"  resultType="com.shiro.YangLaoYuan.entity.Hugong">
+        select *
+        from sys_hugong a
+        where 1=1
+        <if test="dt.keyword!=null and ''!=dt.keyword">
+            and name like CONCAT('%',#{dt.keyword},'%')
+        </if>
+
+
+    </select>
+
+
+    <update id="editHugong" parameterType="com.shiro.YangLaoYuan.entity.Hugong">
+        UPDATE  sys_hugong
+        <trim prefix="set" suffixOverrides=",">
+            <if test="hg.name!=null">name=#{hg.name},</if>
+            <if test="hg.sex!=null">sex=#{hg.sex},</if>
+            <if test="hg.phone!=null">phone=#{hg.phone},</if>
+            <if test="hg.level!=null">level=#{hg.level},</if>
+            <if test="hg.oldmancount!=null">oldmancount=#{hg.oldmancount},</if>
+        </trim>
+        WHERE id=#{hg.id}
+    </update>
+
+</mapper>

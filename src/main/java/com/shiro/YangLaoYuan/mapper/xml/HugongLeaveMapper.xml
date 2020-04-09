@@ -1,0 +1,18 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shiro.YangLaoYuan.mapper.HugongLeaveMapper">
+
+
+
+
+    <select id="findHugongLeaveByname"  resultType="com.shiro.YangLaoYuan.entity.HugongLeave">
+        select a.*,b.name,b.sex
+            from sys_hugongleave a
+            left join sys_hugong b on a.hugongid=b.id
+            where 1=1
+            <if test="dt.keyword!=null and ''!=dt.keyword">
+                and b.name like CONCAT('%',#{dt.keyword},'%')
+            </if>
+
+
+    </select>
+</mapper>

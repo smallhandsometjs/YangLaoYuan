@@ -1,0 +1,177 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shiro.YangLaoYuan.mapper.OldmanMapper">
+
+    <insert id="addOldman" parameterType="com.shiro.YangLaoYuan.entity.Oldman"
+            useGeneratedKeys="true" keyProperty="oldman.id"  keyColumn="id">
+        insert into sys_oldman
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            <if test="oldman.name != null">
+                name,
+            </if>
+            <if test="oldman.sex != null">
+                sex,
+            </if>
+            <if test="oldman.sfz != null">
+                sfz,
+            </if>
+            <if test="oldman.phone != null">
+                phone,
+            </if>
+            <if test="oldman.st != null">
+                st,
+            </if>
+            <if test="oldman.hj != null">
+                hj,
+            </if>
+            <if test="oldman.sfz != null">
+                sfz,
+            </if>
+            <if test="oldman.jjlxr != null">
+                jjlxr,
+            </if>
+            <if test="oldman.adress != null">
+                adress,
+            </if>
+            <if test="oldman.bed.id != null">
+                bed,
+            </if>
+            <if test="oldman.hg.id != null">
+                hg,
+            </if>
+            <if test="oldman.rz != null">
+                rz,
+            </if>
+            <if test="oldman.cy != null">
+                cy,
+            </if>
+            <if test="oldman.desc != null">
+                desc,
+            </if>
+
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="oldman.name != null">
+                #{oldman.name,jdbcType=VARCHAR},
+            </if>
+            <if test="oldman.sex != null">
+                #{oldman.sex,jdbcType=VARCHAR},
+            </if>
+            <if test="oldman.sfz != null">
+                #{oldman.sfz,jdbcType=VARCHAR},
+            </if>
+            <if test="oldman.phone != null">
+                #{oldman.phone,jdbcType=VARCHAR},
+            </if>
+
+            <if test="oldman.st != null">
+                #{oldman.st,jdbcType=VARCHAR},
+            </if>
+            <if test="oldman.hj != null">
+                #{oldman.hj,jdbcType=VARCHAR},
+            </if>
+            <if test="oldman.sfz != null">
+                #{oldman.sfz,jdbcType=VARCHAR},
+            </if>
+            <if test="oldman.jjlxr != null">
+                #{oldman.jjlxr,jdbcType=VARCHAR},
+            </if>
+            <if test="oldman.adress != null">
+                #{oldman.adress,jdbcType=VARCHAR},
+            </if>
+            <if test="oldman.bed.id != null">
+                #{oldman.bed.id,jdbcType=VARCHAR},
+            </if>
+            <if test="oldman.hg.id != null">
+                #{oldman.hg.id,jdbcType=VARCHAR},
+            </if>
+            <if test="oldman.rz != null">
+                #{oldman.rz,jdbcType=VARCHAR},
+            </if>
+            <if test="oldman.cy != null">
+                #{oldman.ct,jdbcType=VARCHAR},
+            </if>
+            <if test="oldman.desc != null">
+                #{oldman.desc,jdbcType=VARCHAR},
+            </if>
+
+        </trim>
+    </insert>
+
+
+
+
+
+
+    <update id="editOldmans" parameterType="com.shiro.YangLaoYuan.entity.Oldman">
+        UPDATE sys_oldman
+        <trim prefix="set" suffixOverrides=",">
+            <if test="bed.id!=null">bed=#{bed.id},</if>
+            <if test="hg.id!=null">hg=#{hg.id},</if>
+            <if test="adress!=null">adress=#{adress},</if>
+            <if test="jjlxr!=null">jjlxr=#{jjlxr},</if>
+            <if test="phone!=null">phone=#{phone},</if>
+        </trim>
+        WHERE id=#{id}
+    </update>
+
+
+
+
+<select id="findOldmans"  resultMap="OldmanResult">
+   SELECT
+	a.id AS oldman_id,
+	a.name,
+	a.sex,
+	a.sfz,
+	a.st,
+	a.hj,
+	a.jjlxr,
+	a.phone,
+	a.adress,
+	b.id AS bed_id,
+	a.bed AS oldman_bed_id,
+	b.info AS bed_info,
+	a.hg AS oldman_hg_id,
+	c.id AS hugong_id,
+	c.name AS hugong_name,
+	a.rz,
+	a.cy,
+	a.DESC
+FROM
+	sys_oldman a
+	LEFT JOIN sys_bed b ON a.bed = b.id
+	LEFT JOIN sys_hugong c ON a.hg = c.id
+</select>
+    
+    <resultMap id="OldmanResult" type="com.shiro.YangLaoYuan.entity.Oldman">
+        <id property="id" column="oldman_id" />
+        <result property="name" column="name"/>
+        <result property="sex" column="sex"/>
+        <result property="sfz" column="sfz"/>
+        <result property="st" column="st"/>
+        <result property="hj" column="hj"/>
+        <result property="jjlxr" column="jjlxr"/>
+        <result property="phone" column="phone"/>
+        <result property="adress" column="adress"/>
+        <result property="rz" column="rz"/>
+        <result property="cy" column="cy"/>
+        <result property="desc" column="desc"/>
+        <association property="hg" column="oldman_hg_id" javaType="com.shiro.YangLaoYuan.entity.Hugong" resultMap="HugongResult"/>
+        <association property="bed" column="oldman_bed_id" javaType="com.shiro.YangLaoYuan.entity.Bed" resultMap="BedResult"/>
+
+    </resultMap>
+
+    <resultMap id="HugongResult" type="com.shiro.YangLaoYuan.entity.Hugong">
+        <id property="id" column="hugong_id"/>
+        <result property="name" column="hugong_name"/>
+
+    </resultMap>
+
+    <resultMap id="BedResult" type="com.shiro.YangLaoYuan.entity.Bed">
+        <id property="id" column="bed_id"/>
+        <result property="info" column="bed_info"/>
+    </resultMap>
+
+</mapper>

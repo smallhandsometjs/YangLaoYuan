@@ -1,0 +1,22 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.shiro.YangLaoYuan.mapper.BedMapper">
+    <select id="findBedInfoBybednmb"  resultType="com.shiro.YangLaoYuan.entity.Bed">
+        select *
+        from sys_bed a
+        where 1=1
+        <if test="dt.keyword!=null and ''!=dt.keyword">
+            and info like CONCAT('%',#{dt.keyword},'%')
+        </if>
+    </select>
+
+    <update id="editBed" parameterType="com.shiro.YangLaoYuan.entity.Bed">
+        UPDATE sys_bed
+        <trim prefix="set" suffixOverrides=",">
+            <if test="bd.isnull!=null">isnull=#{bd.isnull},</if>
+            <if test="bd.info!=null">info=#{bd.info},</if>
+
+        </trim>
+        WHERE id=#{bd.id}
+    </update>
+</mapper>

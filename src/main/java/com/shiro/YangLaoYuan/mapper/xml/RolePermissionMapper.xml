@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shiro.YangLaoYuan.mapper.RolePermissionMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.shiro.YangLaoYuan.entity.RolePermission">
+		<result column="rid" property="rid" />
+		<result column="pid" property="pid" />
+	</resultMap>
+	
+	<select id="findRolesPermisByRole" resultMap="BaseResultMap">
+		SELECT
+			rp.pid
+		FROM
+			`sys_role_permission` rp
+		WHERE
+			rp.rid = #{dto.id}
+	</select>
+	
+	<select id="findCountByRole" resultType="java.lang.Integer">
+		SELECT DISTINCT
+			COUNT(*)
+		FROM
+			sys_role_permission rp
+		INNER JOIN sys_permission p ON rp.pid = p.id
+		WHERE
+			p.url = #{url}
+		AND rp.rid =  #{roleId}
+	</select>
+
+
+    <!-- 根据父id查询菜单 -->
+    <select id="findRolesPermisByFatherId" resultType="com.shiro.YangLaoYuan.pojo.dto.RolePermisDto">
+        <if test="null == fatherId">
+            SELECT
+            sys_permission.`name`,
+            sys_permission.url,
+            sys_permission.id,
+            sys_permission.iconCls
+            FROM
+            `sys_permission`
+            WHERE
+            fatherId = '0'
+            GROUP BY sys_permission.id
+            order by sys_permission.sort
+        </if>
+        <if test="null != fatherId">
+            SELECT
+            sys_permission.`name`,
+            sys_permission.url,
+            sys_permission.id,
+            sys_permission.iconCls
+            FROM
+            sys_role_permission
+            RIGHT JOIN sys_permission ON sys_role_permission.pid = sys_permission.id
+            WHERE
+            fatherId = #{fatherId}
+            <if test="null != rid">
+                AND rid = #{rid}
+            </if>
+            GROUP BY sys_permission.id
+            order by sys_permission.sort
+        </if>
+    </select>
+
+</mapper>
