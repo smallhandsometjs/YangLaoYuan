@@ -40,8 +40,8 @@ public class OldmanApi extends BaseApi {
      * @desc: 查询老人
      *
      * @param
-     * @author: jwy
-     * @date: 2017/12/19
+     * @author:
+     * @date:
      */
     @RequestMapping(value = "/findOldmans",method = RequestMethod.GET)
     public Object findOldmans() {
